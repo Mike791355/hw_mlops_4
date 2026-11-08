@@ -1,0 +1,238 @@
+{
+  "nodes": [
+    {
+      "id": "unit_test.fraud_analytics.stg_transactions.staging_normalizes_and_buckets_boundaries",
+      "label": "staging_normalizes_and_buckets_boundaries"
+    },
+    {
+      "id": "model.fraud_analytics.stg_transactions",
+      "label": "stg_transactions"
+    },
+    {
+      "id": "model.fraud_analytics.mart_hourly_fraud_pattern",
+      "label": "mart_hourly_fraud_pattern"
+    },
+    {
+      "id": "model.fraud_analytics.mart_daily_state_metrics",
+      "label": "mart_daily_state_metrics"
+    },
+    {
+      "id": "model.fraud_analytics.mart_merchant_analytics",
+      "label": "mart_merchant_analytics"
+    },
+    {
+      "id": "model.fraud_analytics.mart_fraud_by_category",
+      "label": "mart_fraud_by_category"
+    },
+    {
+      "id": "model.fraud_analytics.mart_customer_risk_profile",
+      "label": "mart_customer_risk_profile"
+    },
+    {
+      "id": "model.fraud_analytics.mart_fraud_by_state",
+      "label": "mart_fraud_by_state"
+    },
+    {
+      "id": "test.fraud_analytics.assert_marts_reconcile",
+      "label": "assert_marts_reconcile"
+    },
+    {
+      "id": "test.fraud_analytics.assert_source_preserved",
+      "label": "assert_source_preserved"
+    },
+    {
+      "id": "test.fraud_analytics.assert_nonempty_dimensions",
+      "label": "assert_nonempty_dimensions"
+    },
+    {
+      "id": "test.fraud_analytics.assert_no_negative_amounts",
+      "label": "assert_no_negative_amounts"
+    },
+    {
+      "id": "test.fraud_analytics.assert_risk_flags",
+      "label": "assert_risk_flags"
+    },
+    {
+      "id": "test.fraud_analytics.assert_fraud_rate_bounds",
+      "label": "assert_fraud_rate_bounds"
+    },
+    {
+      "id": "unit_test.fraud_analytics.mart_hourly_fraud_pattern.hourly_compares_with_global_labeled_baseline",
+      "label": "hourly_compares_with_global_labeled_baseline"
+    },
+    {
+      "id": "unit_test.fraud_analytics.mart_hourly_fraud_pattern.hourly_unknown_labels_do_not_create_risk",
+      "label": "hourly_unknown_labels_do_not_create_risk"
+    },
+    {
+      "id": "test.fraud_analytics.assert_daily_distribution",
+      "label": "assert_daily_distribution"
+    },
+    {
+      "id": "unit_test.fraud_analytics.mart_daily_state_metrics.daily_metrics_exact_p95_and_large_share",
+      "label": "daily_metrics_exact_p95_and_large_share"
+    },
+    {
+      "id": "unit_test.fraud_analytics.mart_merchant_analytics.merchant_requires_minimum_sample",
+      "label": "merchant_requires_minimum_sample"
+    },
+    {
+      "id": "unit_test.fraud_analytics.mart_fraud_by_category.category_excludes_unknown_labels_from_rate",
+      "label": "category_excludes_unknown_labels_from_rate"
+    },
+    {
+      "id": "unit_test.fraud_analytics.mart_customer_risk_profile.customer_risk_thresholds_and_unknown",
+      "label": "customer_risk_thresholds_and_unknown"
+    },
+    {
+      "id": "unit_test.fraud_analytics.mart_fraud_by_state.state_counts_distinct_customers_and_merchants",
+      "label": "state_counts_distinct_customers_and_merchants"
+    },
+    {
+      "id": "source.fraud_analytics.raw.transactions",
+      "label": "raw.transactions"
+    }
+  ],
+  "edges": [
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "unit_test.fraud_analytics.stg_transactions.staging_normalizes_and_buckets_boundaries"
+    },
+    {
+      "source": "source.fraud_analytics.raw.transactions",
+      "target": "model.fraud_analytics.stg_transactions"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "model.fraud_analytics.mart_hourly_fraud_pattern"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "model.fraud_analytics.mart_daily_state_metrics"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "model.fraud_analytics.mart_merchant_analytics"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "model.fraud_analytics.mart_fraud_by_category"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "model.fraud_analytics.mart_customer_risk_profile"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "model.fraud_analytics.mart_fraud_by_state"
+    },
+    {
+      "source": "model.fraud_analytics.mart_customer_risk_profile",
+      "target": "test.fraud_analytics.assert_marts_reconcile"
+    },
+    {
+      "source": "model.fraud_analytics.mart_daily_state_metrics",
+      "target": "test.fraud_analytics.assert_marts_reconcile"
+    },
+    {
+      "source": "model.fraud_analytics.mart_fraud_by_category",
+      "target": "test.fraud_analytics.assert_marts_reconcile"
+    },
+    {
+      "source": "model.fraud_analytics.mart_fraud_by_state",
+      "target": "test.fraud_analytics.assert_marts_reconcile"
+    },
+    {
+      "source": "model.fraud_analytics.mart_hourly_fraud_pattern",
+      "target": "test.fraud_analytics.assert_marts_reconcile"
+    },
+    {
+      "source": "model.fraud_analytics.mart_merchant_analytics",
+      "target": "test.fraud_analytics.assert_marts_reconcile"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "test.fraud_analytics.assert_marts_reconcile"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "test.fraud_analytics.assert_source_preserved"
+    },
+    {
+      "source": "source.fraud_analytics.raw.transactions",
+      "target": "test.fraud_analytics.assert_source_preserved"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "test.fraud_analytics.assert_nonempty_dimensions"
+    },
+    {
+      "source": "model.fraud_analytics.stg_transactions",
+      "target": "test.fraud_analytics.assert_no_negative_amounts"
+    },
+    {
+      "source": "model.fraud_analytics.mart_customer_risk_profile",
+      "target": "test.fraud_analytics.assert_risk_flags"
+    },
+    {
+      "source": "model.fraud_analytics.mart_hourly_fraud_pattern",
+      "target": "test.fraud_analytics.assert_risk_flags"
+    },
+    {
+      "source": "model.fraud_analytics.mart_merchant_analytics",
+      "target": "test.fraud_analytics.assert_risk_flags"
+    },
+    {
+      "source": "model.fraud_analytics.mart_customer_risk_profile",
+      "target": "test.fraud_analytics.assert_fraud_rate_bounds"
+    },
+    {
+      "source": "model.fraud_analytics.mart_fraud_by_category",
+      "target": "test.fraud_analytics.assert_fraud_rate_bounds"
+    },
+    {
+      "source": "model.fraud_analytics.mart_fraud_by_state",
+      "target": "test.fraud_analytics.assert_fraud_rate_bounds"
+    },
+    {
+      "source": "model.fraud_analytics.mart_hourly_fraud_pattern",
+      "target": "test.fraud_analytics.assert_fraud_rate_bounds"
+    },
+    {
+      "source": "model.fraud_analytics.mart_merchant_analytics",
+      "target": "test.fraud_analytics.assert_fraud_rate_bounds"
+    },
+    {
+      "source": "model.fraud_analytics.mart_hourly_fraud_pattern",
+      "target": "unit_test.fraud_analytics.mart_hourly_fraud_pattern.hourly_compares_with_global_labeled_baseline"
+    },
+    {
+      "source": "model.fraud_analytics.mart_hourly_fraud_pattern",
+      "target": "unit_test.fraud_analytics.mart_hourly_fraud_pattern.hourly_unknown_labels_do_not_create_risk"
+    },
+    {
+      "source": "model.fraud_analytics.mart_daily_state_metrics",
+      "target": "test.fraud_analytics.assert_daily_distribution"
+    },
+    {
+      "source": "model.fraud_analytics.mart_daily_state_metrics",
+      "target": "unit_test.fraud_analytics.mart_daily_state_metrics.daily_metrics_exact_p95_and_large_share"
+    },
+    {
+      "source": "model.fraud_analytics.mart_merchant_analytics",
+      "target": "unit_test.fraud_analytics.mart_merchant_analytics.merchant_requires_minimum_sample"
+    },
+    {
+      "source": "model.fraud_analytics.mart_fraud_by_category",
+      "target": "unit_test.fraud_analytics.mart_fraud_by_category.category_excludes_unknown_labels_from_rate"
+    },
+    {
+      "source": "model.fraud_analytics.mart_customer_risk_profile",
+      "target": "unit_test.fraud_analytics.mart_customer_risk_profile.customer_risk_thresholds_and_unknown"
+    },
+    {
+      "source": "model.fraud_analytics.mart_fraud_by_state",
+      "target": "unit_test.fraud_analytics.mart_fraud_by_state.state_counts_distinct_customers_and_merchants"
+    }
+  ]
+}

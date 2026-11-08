@@ -1,0 +1,37 @@
+name: fraud_analytics
+version: '1.0.0'
+config-version: 2
+profile: fraud_analytics
+require-dbt-version: ['>=1.10.0', '<1.11.0']
+model-paths: [models]
+macro-paths: [macros]
+test-paths: [tests]
+seed-paths: [seeds]
+clean-targets: [target, dbt_packages]
+vars:
+  large_amount_threshold: 1000
+  medium_amount_threshold: 100
+  high_risk_fraud_rate: 5
+  medium_risk_fraud_rate: 1
+  suspicious_min_labeled_transactions: 5
+  'dbt_date:time_zone': UTC
+dispatch:
+  - macro_namespace: dbt_date
+    search_order: [fraud_analytics, dbt_date]
+models:
+  fraud_analytics:
+    +persist_docs:
+      relation: true
+      columns: true
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
+      +engine: MergeTree()
+      +order_by: tuple()
+seeds:
+  fraud_analytics:
+    states:
+      +column_types:
+        state_code: String
+        state_name: String

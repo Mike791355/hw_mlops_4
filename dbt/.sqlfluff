@@ -1,0 +1,21 @@
+[sqlfluff]
+dialect = clickhouse
+templater = dbt
+max_line_length = 120
+rules = LT01,LT12,CP01,AL01,AL02
+
+[sqlfluff:templater:dbt]
+project_dir = .
+profiles_dir = .
+profile = fraud_analytics
+target = dev
+dbt_skip_compilation_error = False
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = lower
+
+[sqlfluff:rules:aliasing.table]
+aliasing = explicit
+
+[sqlfluff:rules:aliasing.column]
+aliasing = explicit

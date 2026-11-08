@@ -1,0 +1,167 @@
+version: 2
+models:
+- name: stg_transactions
+  description: 'Одна строка на исходную транзакцию. Нормализация без молчаливого удаления ошибок или дублей:
+    нарушения выявляют тесты.'
+  columns:
+  - name: transaction_id
+    description: Суррогатный ключ dbt_utils из source_file и row_number.
+    data_tests:
+    - not_null
+    - unique
+  - name: customer_id
+    description: 'Прокси-ID: хеш нормализованных имени, фамилии, пола и координат. Не банковский ID.'
+    data_tests:
+    - not_null
+  - name: source_file
+    description: Имя CSV для трассировки.
+    data_tests:
+    - not_null
+  - name: row_number
+    description: Номер записи CSV.
+    data_tests:
+    - not_null
+  - name: transaction_time
+    description: Время операции UTC.
+    data_tests:
+    - not_null
+  - name: transaction_date
+    description: Дата UTC.
+    data_tests:
+    - not_null
+  - name: day_of_week
+    description: 'День ISO: понедельник 1, воскресенье 7; dbt_date с ClickHouse dispatch.'
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          quote: false
+  - name: transaction_hour
+    description: Час UTC 0–23.
+    data_tests:
+    - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        arguments:
+          min_value: 0
+          max_value: 23
+  - name: merchant
+    description: Название мерчанта без крайних пробелов, регистр сохранён.
+    data_tests:
+    - not_null
+  - name: category
+    description: Категория в нижнем регистре без крайних пробелов.
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - entertainment
+          - food_dining
+          - gas_transport
+          - grocery_net
+          - grocery_pos
+          - health_fitness
+          - home
+          - kids_pets
+          - misc_net
+          - misc_pos
+          - personal_care
+          - shopping_net
+          - shopping_pos
+          - travel
+          quote: true
+  - name: amount
+    description: Decimal64(2), денежная сумма.
+    data_tests:
+    - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        arguments:
+          min_value: 0
+  - name: amount_bucket
+    description: SMALL <100; MEDIUM [100,1000); LARGE >=1000. Пороги vars.
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - SMALL
+          - MEDIUM
+          - LARGE
+          quote: true
+  - name: gender
+    description: Нормализованный пол.
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - F
+          - M
+          quote: true
+  - name: us_state
+    description: Код штата или DC.
+    data_tests:
+    - not_null
+    - relationships:
+        arguments:
+          to: ref('states')
+          field: state_code
+  - name: latitude
+    description: Широта клиента.
+    data_tests:
+    - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        arguments:
+          min_value: -90
+          max_value: 90
+  - name: longitude
+    description: Долгота клиента.
+    data_tests:
+    - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        arguments:
+          min_value: -180
+          max_value: 180
+  - name: merchant_latitude
+    description: Широта мерчанта.
+    data_tests:
+    - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        arguments:
+          min_value: -90
+          max_value: 90
+  - name: merchant_longitude
+    description: Долгота мерчанта.
+    data_tests:
+    - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        arguments:
+          min_value: -180
+          max_value: 180
+  - name: is_fraud
+    description: 'Nullable(UInt8): NULL не заменяется нулём.'
+    data_tests:
+    - accepted_values:
+        arguments:
+          values:
+          - 0
+          - 1
+          quote: false
+  - name: is_labeled
+    description: Есть ли известная метка фрода.
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - 0
+          - 1
+          quote: false

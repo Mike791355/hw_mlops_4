@@ -1,0 +1,13 @@
+[0m12:15:57  Running with dbt=1.10.13
+[0m12:15:58  Installing dbt-labs/dbt_utils
+[0m12:15:59  Installed from version 1.3.0
+[0m12:15:59  Updated version available: 1.4.1
+[0m12:15:59  Installing godatadriven/dbt_date
+[0m12:15:59  Installed from version 0.10.1
+[0m12:15:59  Updated version available: 0.21.0
+[0m12:15:59  Installing metaplane/dbt_expectations
+[0m12:16:01  Installed from version 0.10.10
+[0m12:16:01  Up to date!
+[0m12:16:01  
+[0m12:16:01  Updates available for packages: ['dbt-labs/dbt_utils', 'godatadriven/dbt_date']                 
+Update your versions in packages.yml, then run dbt deps

@@ -1,0 +1,50 @@
+version: 2
+sources:
+  - name: raw
+    schema: "{{ env_var('RAW_DATABASE', 'transactions_db') }}"
+    description: >-
+      Транзакции из ДЗ 2. Загрузчик сохраняет NULL target у неразмеченных строк.
+      Альтернатива загрузке CSV — представление над homework.transactions.
+    tables:
+      - name: transactions
+        description: Одна строка CSV = одна транзакция; идентичность задаёт файл и номер строки.
+        columns:
+          - name: source_file
+            description: Имя исходного CSV; часть технического ключа.
+            data_tests: [not_null]
+          - name: row_number
+            description: Номер записи в CSV, начиная с 1; часть технического ключа.
+            data_tests: [not_null]
+          - name: transaction_time
+            description: Время операции без часового пояса в CSV, интерпретируемое как UTC.
+            data_tests: [not_null]
+          - name: amount
+            description: Денежная сумма с точностью до цента.
+            data_tests: [not_null]
+          - name: merch
+            description: Название мерчанта.
+          - name: cat_id
+            description: Категория операции.
+          - name: name_1
+            description: Имя клиента; персональные данные.
+          - name: name_2
+            description: Фамилия клиента; персональные данные.
+          - name: gender
+            description: Пол клиента F или M.
+          - name: us_state
+            description: Код штата США; DC также допустим по данным ДЗ 2.
+          - name: lat
+            description: Широта клиента.
+          - name: lon
+            description: Долгота клиента.
+          - name: merchant_lat
+            description: Широта мерчанта.
+          - name: merchant_lon
+            description: Долгота мерчанта.
+          - name: target
+            description: '1 = фрод, 0 = легитимная операция, NULL = метка неизвестна.'
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: [0, 1]
+                    quote: false

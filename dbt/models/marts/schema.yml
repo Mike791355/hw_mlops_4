@@ -1,0 +1,305 @@
+version: 2
+models:
+- name: mart_daily_state_metrics
+  description: Дневной оборот и распределение сумм по штатам. Доля крупных операций выражена в процентах.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - transaction_date
+        - us_state
+  columns:
+  - name: transaction_date
+    description: Дата UTC.
+    data_tests:
+    - not_null
+  - name: us_state
+    description: Штат или DC.
+    data_tests:
+    - not_null
+  - name: transaction_count
+    description: Все операции, включая неразмеченные.
+    data_tests: &id001
+    - not_null
+  - name: total_amount
+    description: Оборот всех операций, включая неразмеченные.
+    data_tests: &id002
+    - not_null
+  - name: avg_amount
+    description: Средний чек по всем операциям.
+    data_tests: &id003
+    - not_null
+  - name: p95_amount
+    description: Точный квантиль ClickHouse quantileExact(0.95).
+    data_tests:
+    - not_null
+  - name: large_transaction_count
+    description: Число операций LARGE.
+    data_tests:
+    - not_null
+  - name: large_transaction_share
+    description: Процент крупных операций от всех операций.
+    data_tests:
+    - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        arguments:
+          min_value: 0
+          max_value: 100
+- name: mart_fraud_by_category
+  description: Фрод и оборот по категориям. Для рейтинга сортируйте fraud_rate DESC и учитывайте число
+    размеченных операций.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - category
+  columns:
+  - name: category
+    description: Категория операции.
+    data_tests:
+    - not_null
+    - unique
+  - name: transaction_count
+    description: Все операции, включая неразмеченные.
+    data_tests: *id001
+  - name: labeled_transaction_count
+    description: Число операций с известным target; знаменатель fraud_rate.
+    data_tests: &id004
+    - not_null
+  - name: fraud_count
+    description: Число операций с target=1.
+    data_tests: &id005
+    - not_null
+  - name: fraud_rate
+    description: 100 * fraud_count / labeled_transaction_count. NULL, если меток нет.
+    data_tests: &id006
+    - dbt_expectations.expect_column_values_to_be_between:
+        arguments:
+          min_value: 0
+          max_value: 100
+  - name: total_amount
+    description: Оборот всех операций, включая неразмеченные.
+    data_tests: *id002
+  - name: fraud_amount
+    description: Сумма только операций target=1.
+    data_tests: &id007
+    - not_null
+  - name: avg_amount
+    description: Средний чек по всем операциям.
+    data_tests: *id003
+- name: mart_fraud_by_state
+  description: География фрода с точным числом клиентов и мерчантов.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - us_state
+  columns:
+  - name: us_state
+    description: Штат или DC.
+    data_tests:
+    - not_null
+    - unique
+  - name: transaction_count
+    description: Все операции, включая неразмеченные.
+    data_tests: *id001
+  - name: labeled_transaction_count
+    description: Число операций с известным target; знаменатель fraud_rate.
+    data_tests: *id004
+  - name: fraud_count
+    description: Число операций с target=1.
+    data_tests: *id005
+  - name: fraud_rate
+    description: 100 * fraud_count / labeled_transaction_count. NULL, если меток нет.
+    data_tests: *id006
+  - name: total_amount
+    description: Оборот всех операций, включая неразмеченные.
+    data_tests: *id002
+  - name: fraud_amount
+    description: Сумма только операций target=1.
+    data_tests: *id007
+  - name: unique_customers
+    description: Точное число уникальных прокси-ID клиентов.
+    data_tests: &id008
+    - not_null
+  - name: unique_merchants
+    description: Точное число уникальных названий мерчантов.
+    data_tests:
+    - not_null
+- name: mart_customer_risk_profile
+  description: Исторический профиль клиента. Описательная сегментация, не модель предсказания. При отсутствии
+    меток LOW сопровождается has_known_risk=0.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - customer_id
+  columns:
+  - name: customer_id
+    description: Прокси-ID клиента.
+    data_tests:
+    - not_null
+    - unique
+  - name: transaction_count
+    description: Все операции, включая неразмеченные.
+    data_tests: *id001
+  - name: labeled_transaction_count
+    description: Число операций с известным target; знаменатель fraud_rate.
+    data_tests: *id004
+  - name: fraud_count
+    description: Число операций с target=1.
+    data_tests: *id005
+  - name: fraud_rate
+    description: 100 * fraud_count / labeled_transaction_count. NULL, если меток нет.
+    data_tests: *id006
+  - name: total_amount
+    description: Оборот всех операций, включая неразмеченные.
+    data_tests: *id002
+  - name: fraud_amount
+    description: Сумма только операций target=1.
+    data_tests: *id007
+  - name: avg_amount
+    description: Средний чек по всем операциям.
+    data_tests: *id003
+  - name: first_transaction_at
+    description: Первая операция UTC.
+    data_tests: &id009
+    - not_null
+  - name: last_transaction_at
+    description: Последняя операция UTC.
+    data_tests: &id010
+    - not_null
+  - name: active_days
+    description: Число дат UTC с транзакциями.
+    data_tests:
+    - not_null
+  - name: risk_level
+    description: HIGH >=5%; MEDIUM >=1%; иначе LOW. Пороги vars.
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - HIGH
+          - MEDIUM
+          - LOW
+          quote: true
+  - name: has_known_risk
+    description: 0 означает, что LOW не подтверждён размеченными данными.
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - 0
+          - 1
+          quote: false
+- name: mart_hourly_fraud_pattern
+  description: 'Паттерны по дню ISO и часу UTC. Повышенный риск: rate выше общего и >=5 размеченных операций.'
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - day_of_week
+        - transaction_hour
+  columns:
+  - name: day_of_week
+    description: День ISO 1–7.
+    data_tests:
+    - not_null
+  - name: transaction_hour
+    description: Час UTC 0–23.
+    data_tests:
+    - not_null
+  - name: transaction_count
+    description: Все операции, включая неразмеченные.
+    data_tests: *id001
+  - name: labeled_transaction_count
+    description: Число операций с известным target; знаменатель fraud_rate.
+    data_tests: *id004
+  - name: fraud_count
+    description: Число операций с target=1.
+    data_tests: *id005
+  - name: fraud_rate
+    description: 100 * fraud_count / labeled_transaction_count. NULL, если меток нет.
+    data_tests: *id006
+  - name: total_amount
+    description: Оборот всех операций, включая неразмеченные.
+    data_tests: *id002
+  - name: fraud_amount
+    description: Сумма только операций target=1.
+    data_tests: *id007
+  - name: baseline_fraud_rate
+    description: Общий процент фрода по размеченной выборке.
+    data_tests:
+    - dbt_expectations.expect_column_values_to_be_between:
+        arguments:
+          min_value: 0
+          max_value: 100
+  - name: is_high_risk_window
+    description: Окно с повышенным риском и достаточной выборкой.
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - 0
+          - 1
+          quote: false
+- name: mart_merchant_analytics
+  description: 'Оборот и риск мерчантов. Подозрительный: >=5 размеченных операций и fraud_rate >=5%.'
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - merchant
+  columns:
+  - name: merchant
+    description: Название мерчанта.
+    data_tests:
+    - not_null
+    - unique
+  - name: transaction_count
+    description: Все операции, включая неразмеченные.
+    data_tests: *id001
+  - name: labeled_transaction_count
+    description: Число операций с известным target; знаменатель fraud_rate.
+    data_tests: *id004
+  - name: fraud_count
+    description: Число операций с target=1.
+    data_tests: *id005
+  - name: fraud_rate
+    description: 100 * fraud_count / labeled_transaction_count. NULL, если меток нет.
+    data_tests: *id006
+  - name: total_amount
+    description: Оборот всех операций, включая неразмеченные.
+    data_tests: *id002
+  - name: fraud_amount
+    description: Сумма только операций target=1.
+    data_tests: *id007
+  - name: avg_amount
+    description: Средний чек по всем операциям.
+    data_tests: *id003
+  - name: unique_customers
+    description: Точное число уникальных прокси-ID клиентов.
+    data_tests: *id008
+  - name: first_transaction_at
+    description: Первая операция UTC.
+    data_tests: *id009
+  - name: last_transaction_at
+    description: Последняя операция UTC.
+    data_tests: *id010
+  - name: unique_states
+    description: Число уникальных штатов клиентов.
+    data_tests:
+    - not_null
+  - name: is_suspicious
+    description: Флаг подозрительности; при отсутствии меток false.
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - 0
+          - 1
+          quote: false

@@ -1,0 +1,57 @@
+name: hw4-dbt
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.8.1.5101
+    ports:
+      - '127.0.0.1:18124:8123'
+    environment:
+      CLICKHOUSE_USER: homework
+      CLICKHOUSE_PASSWORD: homework
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: '1'
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    healthcheck:
+      test: [CMD, clickhouse-client, --user, homework, --password, homework, --query, SELECT 1]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+  dbt:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    profiles: [tools]
+    working_dir: /workspace/dbt
+    environment:
+      CLICKHOUSE_HOST: clickhouse
+      CLICKHOUSE_PORT: '8123'
+      CLICKHOUSE_USER: homework
+      CLICKHOUSE_PASSWORD: homework
+      RAW_DATABASE: ${RAW_DATABASE:-transactions_db}
+      DBT_SCHEMA: ${DBT_SCHEMA:-analytics}
+      DBT_PROFILES_DIR: /workspace/dbt
+      DBT_SEND_ANONYMOUS_USAGE_STATS: 'false'
+    volumes:
+      - .:/workspace
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+  docs:
+    extends: dbt
+    profiles: [docs]
+    ports:
+      - '127.0.0.1:18080:8080'
+    command: [dbt, docs, serve, --host, 0.0.0.0, --port, '8080', --no-browser]
+  screenshots:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.docs
+    profiles: [tools]
+    volumes:
+      - .:/workspace
+volumes:
+  clickhouse_data:

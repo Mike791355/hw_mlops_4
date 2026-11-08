@@ -1,0 +1,26 @@
+[0m12:16:19  Running with dbt=1.10.13
+[0m12:16:19  Registered adapter: clickhouse=1.9.8
+[0m12:16:19  Found 7 models, 125 data tests, 1 seed, 1 source, 873 macros, 8 unit tests
+[0m12:16:19  
+[0m12:16:19  Concurrency: 4 threads (target='dev')
+[0m12:16:19  
+[0m12:16:20  1 of 7 START sql view model `analytics`.`stg_transactions` ..................... [RUN]
+[0m12:16:20  1 of 7 OK created sql view model `analytics`.`stg_transactions` ................ [[32mOK[0m in 0.08s]
+[0m12:16:20  2 of 7 START sql table model `analytics`.`mart_customer_risk_profile` .......... [RUN]
+[0m12:16:20  3 of 7 START sql table model `analytics`.`mart_daily_state_metrics` ............ [RUN]
+[0m12:16:20  4 of 7 START sql table model `analytics`.`mart_fraud_by_category` .............. [RUN]
+[0m12:16:20  5 of 7 START sql table model `analytics`.`mart_fraud_by_state` ................. [RUN]
+[0m12:16:20  4 of 7 OK created sql table model `analytics`.`mart_fraud_by_category` ......... [[32mOK[0m in 0.17s]
+[0m12:16:20  6 of 7 START sql table model `analytics`.`mart_hourly_fraud_pattern` ........... [RUN]
+[0m12:16:20  3 of 7 OK created sql table model `analytics`.`mart_daily_state_metrics` ....... [[32mOK[0m in 0.22s]
+[0m12:16:20  7 of 7 START sql table model `analytics`.`mart_merchant_analytics` ............. [RUN]
+[0m12:16:20  5 of 7 OK created sql table model `analytics`.`mart_fraud_by_state` ............ [[32mOK[0m in 0.24s]
+[0m12:16:20  6 of 7 OK created sql table model `analytics`.`mart_hourly_fraud_pattern` ...... [[32mOK[0m in 0.07s]
+[0m12:16:20  2 of 7 OK created sql table model `analytics`.`mart_customer_risk_profile` ..... [[32mOK[0m in 0.42s]
+[0m12:16:20  7 of 7 OK created sql table model `analytics`.`mart_merchant_analytics` ........ [[32mOK[0m in 0.19s]
+[0m12:16:20  
+[0m12:16:20  Finished running 6 table models, 1 view model in 0 hours 0 minutes and 0.67 seconds (0.67s).
+[0m12:16:20  
+[0m12:16:20  [32mCompleted successfully[0m
+[0m12:16:20  
+[0m12:16:20  Done. PASS=7 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=7

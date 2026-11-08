@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "input_rows": 1048575,
+  "tests_passed": 133,
+  "data_tests": 125,
+  "unit_tests": 8,
+  "lint_passed": true,
+  "docs_screenshots_verified": true,
+  "marts": {
+    "mart_customer_risk_profile": {
+      "rows": 965,
+      "transaction_count": 1048575,
+      "total_amount": "73692902.08"
+    },
+    "mart_daily_state_metrics": {
+      "rows": 21473,
+      "transaction_count": 1048575,
+      "total_amount": "73692902.08"
+    },
+    "mart_fraud_by_category": {
+      "rows": 14,
+      "transaction_count": 1048575,
+      "total_amount": "73692902.08"
+    },
+    "mart_fraud_by_state": {
+      "rows": 51,
+      "transaction_count": 1048575,
+      "total_amount": "73692902.08"
+    },
+    "mart_hourly_fraud_pattern": {
+      "rows": 168,
+      "transaction_count": 1048575,
+      "total_amount": "73692902.08"
+    },
+    "mart_merchant_analytics": {
+      "rows": 693,
+      "transaction_count": 1048575,
+      "total_amount": "73692902.08"
+    }
+  }
+}

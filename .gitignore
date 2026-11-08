@@ -1,0 +1,9 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+.env
+dbt/dbt_packages/
+dbt/target/
+dbt/logs/
+teta-ml-1-2025/

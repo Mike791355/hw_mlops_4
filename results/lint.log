@@ -1,0 +1,8 @@
+=== [dbt templater] Sorting Nodes...
+=== [dbt templater] Compiling dbt project...
+=== [dbt templater] Project Compiled.
+WARNING    Skipped file /workspace/dbt/macros/amount_bucket.sql because it is a macro 
+WARNING    Skipped file /workspace/dbt/macros/date_dispatch.sql because it is a macro 
+WARNING    Skipped file /workspace/dbt/macros/fraud_rate.sql because it is a macro 
+WARNING    Skipped file /workspace/dbt/macros/risk_level.sql because it is a macro 
+All Finished!

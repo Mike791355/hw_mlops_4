@@ -1,0 +1,8 @@
+.venv
+.git
+__pycache__
+results
+dbt/target
+dbt/dbt_packages
+dbt/logs
+teta-ml-1-2025

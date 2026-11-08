@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "docs": "dbt-docs.png",
+  "dag": "dbt-dag.png",
+  "verified_nodes": [
+    "model.fraud_analytics.stg_transactions",
+    "model.fraud_analytics.mart_hourly_fraud_pattern",
+    "model.fraud_analytics.mart_daily_state_metrics",
+    "model.fraud_analytics.mart_merchant_analytics",
+    "model.fraud_analytics.mart_fraud_by_category",
+    "model.fraud_analytics.mart_customer_risk_profile",
+    "model.fraud_analytics.mart_fraud_by_state",
+    "source.fraud_analytics.raw.transactions"
+  ]
+}

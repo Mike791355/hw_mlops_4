@@ -1,0 +1,15 @@
+[0m12:16:15  Running with dbt=1.10.13
+[0m12:16:15  Registered adapter: clickhouse=1.9.8
+[0m12:16:16  Unable to do partial parsing because config vars, config profile, or config target have changed
+[0m12:16:17  Found 7 models, 125 data tests, 1 seed, 1 source, 873 macros, 8 unit tests
+[0m12:16:17  
+[0m12:16:17  Concurrency: 4 threads (target='dev')
+[0m12:16:17  
+[0m12:16:17  1 of 1 START seed file `analytics`.`states` .................................... [RUN]
+[0m12:16:17  1 of 1 OK loaded seed file analytics.states .................................... [[32mINSERT 51[0m in 0.04s]
+[0m12:16:17  
+[0m12:16:17  Finished running 1 seed in 0 hours 0 minutes and 0.21 seconds (0.21s).
+[0m12:16:18  
+[0m12:16:18  [32mCompleted successfully[0m
+[0m12:16:18  
+[0m12:16:18  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=1

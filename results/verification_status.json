@@ -1,0 +1,39 @@
+{
+  "started_at": "2026-11-06T12:15:54.619859+00:00",
+  "success": true,
+  "steps": [
+    {
+      "step": "versions",
+      "exit_code": 0
+    },
+    {
+      "step": "deps",
+      "exit_code": 0
+    },
+    {
+      "step": "debug",
+      "exit_code": 0
+    },
+    {
+      "step": "seed",
+      "exit_code": 0
+    },
+    {
+      "step": "run",
+      "exit_code": 0
+    },
+    {
+      "step": "test",
+      "exit_code": 0
+    },
+    {
+      "step": "docs",
+      "exit_code": 0
+    },
+    {
+      "step": "lint",
+      "exit_code": 0
+    }
+  ],
+  "finished_at": "2026-11-06T12:16:33.118578+00:00"
+}
